@@ -10,6 +10,12 @@ For us the example was a Logstash/Elastic Search service. It was buggy - and the
 Usage
 -----
 
+Log into Cloud Foundry with admin user credentials; and target an arbitrary organization/space. It doesn't matter which - the `./bin/delete.sh` command will destroy all bindings/service instances across all orgs/spaces.
+
+```
+cf login -a <api.url> -u admin -p PASSWORD
+```
+
 In our case, the bad service was `logstash14` (for all plans). To find all service instances and service bindings, then unbind the bindings and delete the service instances we ran:
 
 ```
@@ -18,10 +24,19 @@ In our case, the bad service was `logstash14` (for all plans). To find all servi
 
 As a bonus, the output showed us exactly what commands to run to recreate the service instances and rebind the applications (after we fixed the service).
 
+For example:
+
+```
+```
+
 Trial
 -----
 
 You might want to try this out first before running in production.
+
+Start up a dedicated Cloud Foundry, such as with bosh-lite.
+
+Then run:
 
 ```
 ./bin/setup.sh
