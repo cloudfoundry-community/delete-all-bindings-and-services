@@ -45,7 +45,7 @@ for service_instance in $service_instances; do
         echo "Unbinding app $app_name from service $service_instance_name in $org_name/$space_name"
 
         recreation_commands+=("cf target -o $org_name -s $space_name; cf cs $service_name $plan_name $service_instance_name")
-        recreation_commands+=("cf target -o $org_name -s $space_name; cf bs $app_name $service_instance_name")
+        recreation_commands+=("cf target -o $org_name -s $space_name; cf bs $app_name $service_instance_name; cf restart $app_name")
         # echo "DELETE /v2/apps/$app_guid/service_bindings/$binding_guid"
         cf curl -X DELETE "/v2/apps/$app_guid/service_bindings/$binding_guid" && echo "Unbound; needs restarting." || echo "Failed to unbind for some reason."
       done
