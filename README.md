@@ -27,6 +27,13 @@ As a bonus, the output showed us exactly what commands to run to recreate the se
 For example:
 
 ```
+Recreate service instances and bindings:
+cf target -o system -s dev; cf cs logstash14 free logstash-one
+cf target -o system -s dev; cf bs app-one-log-one logstash-one; cf restart app-one-log-one
+cf target -o system -s dev; cf cs logstash14 free logstash-one
+cf target -o system -s dev; cf bs app-two-log-one logstash-one; cf restart app-two-log-one
+cf target -o system -s dev; cf cs logstash14 free logstash-two
+cf target -o system -s dev; cf bs app-three-log-two logstash-two; cf restart app-three-log-two
 ```
 
 Trial
@@ -44,4 +51,38 @@ Then run:
 
 This is an example script to deploy some apps, create some services, and bind them together.
 
+You will have the following service instances/app bindings:
+
+```
+$ cf s
+name           service      plan   bound apps                         status
+logstash-one   logstash14   free   app-one-log-one, app-two-log-one   available
+logstash-two   logstash14   free   app-three-log-two                  available
+```
+
 You can then delete them with the `./bin/delete.sh` command above.
+
+```
+./bin/delete.sh logstash14
+```
+
+At this point, since we only had `logstash14` service instances, we will now have no service instances. For example:
+
+```
+$ cf s
+Getting services in org system / space dev as admin...
+OK
+
+No services found
+```
+
+Finally, you recreate the service instances/bindings with the recommended commands to run (from the `./bin/delete.sh logstash14` command):
+
+```
+cf target -o system -s dev; cf cs logstash14 free logstash-one
+cf target -o system -s dev; cf bs app-one-log-one logstash-one; cf restart app-one-log-one
+cf target -o system -s dev; cf cs logstash14 free logstash-one
+cf target -o system -s dev; cf bs app-two-log-one logstash-one; cf restart app-two-log-one
+cf target -o system -s dev; cf cs logstash14 free logstash-two
+cf target -o system -s dev; cf bs app-three-log-two logstash-two; cf restart app-three-log-two
+```
